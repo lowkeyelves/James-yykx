@@ -7,13 +7,26 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# 下载并解压预编译的 Caddy（带 NaiveProxy 插件）
-RUN curl -fsSL -o /tmp/caddy.tar.xz "https://github.com/klzgrad/forwardproxy/releases/download/caddy2-naive-20221007/caddy-forwardproxy-naive.tar.xz" \
-    || { echo "错误：无法下载 caddy-forwardproxy-naive.tar.xz"; exit 1; } \
-    && tar -xJf /tmp/caddy.tar.xz -C /usr/bin/ \
-    || { echo "错误：无法解压 caddy.tar.xz"; exit 1; } \
-    && chmod +x /usr/bin/caddy \
-    && rm /tmp/caddy.tar.xz
+# 下载并解压 v2.7.5-caddy2-naive2
+RUN cd /tmp && \
+    curl -fsSL --retry 3 --retry-delay 5 -o caddy.tar.xz "https://github.com/klzgrad/forwardproxy/releases/download/v2.7.5-caddy2-naive2/caddy-forwardproxy-naive.tar.xz" \
+    || { echo "错误：无法下载 v2.7.5-caddy2-naive2"; exit 1; } && \
+    tar -xJf caddy.tar.xz -C /tmp/ \
+    || { echo "错误：无法解压 v2.7.5-caddy2-naive2"; exit 1; } && \
+    mv /tmp/caddy-forwardproxy-naive/caddy /usr/bin/caddy \
+    || { echo "错误：无法移动 caddy 到 /usr/bin/"; exit 1; } && \
+    rm -rf /tmp/caddy.tar.xz /tmp/caddy-forwardproxy-naive
+
+# 下载并解压 caddy2-naive-20221007，替换之前的 caddy
+RUN cd /tmp && \
+    curl -fsSL --retry 3 --retry-delay 5 -o caddy.tar.xz "https://github.com/klzgrad/forwardproxy/releases/download/caddy2-naive-20221007/caddy-forwardproxy-naive.tar.xz" \
+    || { echo "错误：无法下载 caddy2-naive-20221007"; exit 1; } && \
+    tar -xJf caddy.tar.xz -C /tmp/ \
+    || { echo "错误：无法解压 caddy2-naive-20221007"; exit 1; } && \
+    mv /tmp/caddy-forwardproxy-naive/caddy /usr/bin/caddy \
+    || { echo "错误：无法移动 caddy 到 /usr/bin/"; exit 1; } && \
+    chmod +x /usr/bin/caddy && \
+    rm -rf /tmp/caddy.tar.xz /tmp/caddy-forwardproxy-naive
 
 # 创建挂载点和配置文件目录
 RUN mkdir -p /etc/caddy /data/certs /data/config
