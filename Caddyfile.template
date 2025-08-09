@@ -5,8 +5,10 @@
     order forward_proxy before file_server
 }
 
-:443, ${DOMAIN} {
-    tls ${CERT_PATH} ${KEY_PATH}
+${DOMAIN} {
+    tls {
+        on_demand
+    }
     route {
         forward_proxy {
             basic_auth ${PROXY_USER} ${PROXY_PASSWORD}
