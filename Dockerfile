@@ -1,9 +1,9 @@
 # 使用轻量化的 Debian 基础镜像
 FROM debian:bullseye-slim
 
-# 安装必要依赖
+# 安装必要依赖，包括 gettext-base 以提供 envsubst
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates curl xz-utils \
+    && apt-get install -y --no-install-recommends ca-certificates curl xz-utils gettext-base \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
