@@ -17,6 +17,9 @@ fi
 mkdir -p /data/caddy
 chown -R 1000:1000 /data/caddy
 
+# 设置 Caddy 数据目录环境变量
+export CADDY_DATA_DIR=/data/caddy
+
 # 默认 Caddyfile 路径
 CADDYFILE="/etc/caddy/Caddyfile"
 
@@ -33,5 +36,5 @@ fi
 echo "生成的 Caddyfile 内容："
 cat $CADDYFILE
 
-# 启动 Caddy，指定数据目录
-exec /usr/bin/caddy run --config /etc/caddy/Caddyfile --adapter caddyfile --data-dir /data/caddy
+# 启动 Caddy
+exec /usr/bin/caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
