@@ -1,23 +1,17 @@
-# 阶段 1：构建 Caddy 和 NaiveProxy
-FROM golang:1.19 AS build
-
-WORKDIR /go
-
-# 安装 xcaddy 并构建 Caddy，包含 NaiveProxy 插件
-RUN go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest \
-    && /go/bin/xcaddy build --with github.com/caddyserver/forwardproxy@caddy2=github.com/klzgrad/forwardproxy@naive
-
-# 阶段 2：创建最终镜像
-FROM debian:bullseye-slim AS final
+# 使用轻量化的 Debian 基础镜像
+FROM debian:bullseye-slim
 
 # 安装必要依赖
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates \
+    && apt-get install -y --no-install-recommends ca-certificates curl xz-utils \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# 从构建阶段复制 Caddy 二进制文件
-COPY --from=build /go/caddy /usr/bin/caddy
+# 下载并解压预编译的 Caddy（带 NaiveProxy 插件）
+RUN curl -o /tmp/caddy.tar.xz -L "https://github.com/klzgrad/forwardproxy/releases/download/caddy2-naive-20221007/caddy-forwardproxy-naive.tar.xz" \
+    && tar -xJf /tmp/caddy.tar.xz -C /usr/bin/ \
+    && chmod +x /usr/bin/caddy \
+    && rm /tmp/caddy.tar.xz
 
 # 创建挂载点和配置文件目录
 RUN mkdir -p /etc/caddy /data/certs /data/config
