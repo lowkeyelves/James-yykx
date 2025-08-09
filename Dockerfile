@@ -29,7 +29,7 @@ RUN cd /tmp && \
     rm -rf /tmp/caddy.tar.xz /tmp/caddy-forwardproxy-naive
 
 # 创建挂载点和配置文件目录
-RUN mkdir -p /etc/caddy /data/certs /data/config
+RUN mkdir -p /etc/caddy /data/certs /data/config /data/caddy
 
 # 复制 Caddyfile 模板和入口脚本
 COPY Caddyfile.template /etc/caddy/Caddyfile.template
@@ -47,4 +47,4 @@ VOLUME ["/data"]
 
 # 使用入口脚本启动
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/usr/bin/caddy", "run", "--config", "/etc/caddy/Caddyfile"]
+CMD ["/usr/bin/caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
