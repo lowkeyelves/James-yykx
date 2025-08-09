@@ -13,12 +13,15 @@ if [ ! -d "/data" ]; then
     exit 1
 fi
 
-# 确保 Caddy 数据目录可写（用于存储 Let's Encrypt 证书）
+# 确保 Caddy 数据目录可写
 mkdir -p /data/caddy
 chown -R 1000:1000 /data/caddy
+echo "检查 /data/caddy 权限："
+ls -ld /data/caddy
 
 # 设置 Caddy 数据目录环境变量
 export CADDY_DATA_DIR=/data/caddy
+echo "CADDY_DATA_DIR=$CADDY_DATA_DIR"
 
 # 默认 Caddyfile 路径
 CADDYFILE="/etc/caddy/Caddyfile"
