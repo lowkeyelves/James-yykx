@@ -11,7 +11,7 @@
 ${DOMAIN} {
     tls {
         issuer acme
-        email your-email@example.com
+        email xhhyykl@outlook.com
     }
     route {
         forward_proxy {
