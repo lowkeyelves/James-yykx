@@ -1,10 +1,15 @@
 {
     debug
     http_port ${HTTP_PORT}
+    https_port ${HTTPS_PORT}
     order forward_proxy before file_server
+    storage file_system {
+        root /data/certs
+    }
 }
 
-:${HTTP_PORT}, ${DOMAIN} {
+:443, ${DOMAIN} {
+    tls /data/certs/hy2.crt /data/certs/hy2.key
     route {
         forward_proxy {
             basic_auth ${PROXY_USER} ${PROXY_PASSWORD}
