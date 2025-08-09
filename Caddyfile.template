@@ -1,20 +1,20 @@
 {
     debug
-    http_port {$HTTP_PORT:80}
-    https_port {$HTTPS_PORT:443}
+    http_port ${HTTP_PORT}
+    https_port ${HTTPS_PORT}
     order forward_proxy before file_server
 }
 
-:443, {$DOMAIN} {
-    tls {$CERT_PATH} {$KEY_PATH}
+:443, ${DOMAIN} {
+    tls ${CERT_PATH} ${KEY_PATH}
     route {
         forward_proxy {
-            basic_auth {$PROXY_USER} {$PROXY_PASSWORD}
+            basic_auth ${PROXY_USER} ${PROXY_PASSWORD}
             hide_ip
             hide_via
             probe_resistance
         }
-        reverse_proxy {$FAKE_HOST:https://www.example.com} {
+        reverse_proxy ${FAKE_HOST} {
             header_up Host {upstream_hostport}
         }
     }
