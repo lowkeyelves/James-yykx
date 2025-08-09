@@ -8,8 +8,10 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # 下载并解压预编译的 Caddy（带 NaiveProxy 插件）
-RUN curl -o /tmp/caddy.tar.xz -L "https://github.com/klzgrad/forwardproxy/releases/download/caddy2-naive-20221007/caddy-forwardproxy-naive.tar.xz" \
+RUN curl -fsSL -o /tmp/caddy.tar.xz "https://github.com/klzgrad/forwardproxy/releases/download/caddy2-naive-20221007/caddy-forwardproxy-naive.tar.xz" \
+    || { echo "错误：无法下载 caddy-forwardproxy-naive.tar.xz"; exit 1; } \
     && tar -xJf /tmp/caddy.tar.xz -C /usr/bin/ \
+    || { echo "错误：无法解压 caddy.tar.xz"; exit 1; } \
     && chmod +x /usr/bin/caddy \
     && rm /tmp/caddy.tar.xz
 
