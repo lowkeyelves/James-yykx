@@ -43,4 +43,4 @@ jobs:
           push: true
           tags: |
             docker.io/james1314/naiveproxy-clawcloud:latest
-            ghcr.io/lowkeyelves/naiveproxy-clawcloud:latest
+        
