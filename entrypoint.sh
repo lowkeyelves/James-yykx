@@ -19,8 +19,10 @@ chown -R 1000:1000 /data/caddy
 echo "检查 /data/caddy 权限："
 ls -ld /data/caddy
 
-# 设置 Caddy 数据目录环境变量
+# 设置 Caddy 数据目录
+export XDG_DATA_HOME=/data/caddy
 export CADDY_DATA_DIR=/data/caddy
+echo "XDG_DATA_HOME=$XDG_DATA_HOME"
 echo "CADDY_DATA_DIR=$CADDY_DATA_DIR"
 
 # 默认 Caddyfile 路径
@@ -38,6 +40,9 @@ fi
 # 调试：打印生成的 Caddyfile
 echo "生成的 Caddyfile 内容："
 cat $CADDYFILE
+
+# 调试：验证环境变量
+env | grep -E 'XDG_DATA_HOME|CADDY_DATA_DIR'
 
 # 启动 Caddy
 exec /usr/bin/caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
