@@ -8,11 +8,8 @@
     }
 }
 
-${DOMAIN} {
-    tls {
-        issuer acme
-        xhhyykl@outlook.com
-    }
+:443, ${DOMAIN} {
+    tls xhhyykl@outlook.com
     route {
         forward_proxy {
             basic_auth ${PROXY_USER} ${PROXY_PASSWORD}
