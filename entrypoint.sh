@@ -13,15 +13,15 @@ if [ ! -d "/data" ]; then
     exit 1
 fi
 
-# 确保 Caddy 数据目录可写
-mkdir -p /data/caddy
-chown -R 1000:1000 /data/caddy
-echo "检查 /data/caddy 权限："
-ls -ld /data/caddy
+# 确保证书目录可写
+mkdir -p /data/certs
+chown -R 1000:1000 /data/certs
+echo "检查 /data/certs 权限："
+ls -ld /data/certs
 
 # 设置 Caddy 数据目录
-export XDG_DATA_HOME=/data/caddy
-export CADDY_DATA_DIR=/data/caddy
+export XDG_DATA_HOME=/data/certs
+export CADDY_DATA_DIR=/data/certs
 echo "XDG_DATA_HOME=$XDG_DATA_HOME"
 echo "CADDY_DATA_DIR=$CADDY_DATA_DIR"
 
