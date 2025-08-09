@@ -3,11 +3,15 @@
     http_port ${HTTP_PORT}
     https_port ${HTTPS_PORT}
     order forward_proxy before file_server
+    storage file_system {
+        root /data/caddy
+    }
 }
 
 ${DOMAIN} {
     tls {
-        on_demand
+        issuer acme
+        email your-email@example.com
     }
     route {
         forward_proxy {
