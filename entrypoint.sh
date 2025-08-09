@@ -13,11 +13,9 @@ if [ ! -d "/data" ]; then
     exit 1
 fi
 
-# 检查证书文件（使用环境变量 CERT_PATH 和 KEY_PATH）
-if [ ! -f "$CERT_PATH" ] || [ ! -f "$KEY_PATH" ]; then
-    echo "错误：证书文件未找到！CERT_PATH=$CERT_PATH, KEY_PATH=$KEY_PATH"
-    exit 1
-fi
+# 确保 Caddy 数据目录可写（用于存储 Let's Encrypt 证书）
+mkdir -p /data/caddy
+chown -R 1000:1000 /data/caddy
 
 # 默认 Caddyfile 路径
 CADDYFILE="/etc/caddy/Caddyfile"
@@ -35,5 +33,5 @@ fi
 echo "生成的 Caddyfile 内容："
 cat $CADDYFILE
 
-# 启动 Caddy
-exec "$@"
+# 启动 Caddy，指定数据目录
+exec /usr/bin/caddy run --config /etc/caddy/Caddyfile --adapter caddyfile --data-dir /data/caddy
